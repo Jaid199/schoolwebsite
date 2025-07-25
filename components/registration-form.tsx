@@ -56,7 +56,7 @@ function ParticipantFields({
           <Input
             id={`${prefix}fullName`}
             name={`${prefix}fullName`}
-            placeholder="Admed Hassan"
+            placeholder="Ahmed mohamed"
             required
             onChange={onInputChange}
           />
@@ -72,7 +72,7 @@ function ParticipantFields({
             id={`${prefix}email`}
             name={`${prefix}email`}
             type="email"
-            placeholder="ahmedhassan@example.com"
+            placeholder="ahmed@example.com"
             required
             onChange={onInputChange}
           />
@@ -86,7 +86,7 @@ function ParticipantFields({
             id={`${prefix}phoneNumber`}
             name={`${prefix}phoneNumber`}
             type="tel"
-            placeholder="+960-0000000"
+            placeholder="960-0000000"
             required
             onChange={onInputChange}
           />
@@ -424,7 +424,7 @@ export default function RegistrationForm() {
                   </DialogHeader>
                   <div className="py-4">
                     <Image
-                      src="/placeholder.svg?height=400&width=600"
+                      src="/images/tshirt-size-chart.png" // Updated image path
                       alt="T-shirt Size Chart"
                       width={600}
                       height={400}

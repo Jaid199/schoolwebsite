@@ -18,7 +18,7 @@ export default function Footer() {
               aria-label="MNU Home"
             >
               <Image
-                src="/placeholder.svg?height=64&width=200"
+                src="/images/mnu-logo.png" // Updated image path
                 alt="Maldives National University Logo"
                 width={200}
                 height={64}

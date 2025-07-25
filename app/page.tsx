@@ -9,7 +9,6 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import Footer from "@/components/footer";
-// Import the new Footer component
 
 export default function Home() {
   return (
@@ -18,7 +17,7 @@ export default function Home() {
       <section
         className="relative w-full min-h-[400px] flex items-center justify-center"
         style={{
-          backgroundImage: "url('/placeholder.svg?height=400&width=1920')",
+          backgroundImage: "url('/images/hero-background.png')", // Updated image path
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
@@ -37,7 +36,7 @@ export default function Home() {
       <section className="flex flex-col md:flex-row items-center justify-center gap-8 py-12">
         <div className="w-full md:w-1/2 flex justify-end">
           <Image
-            src="/placeholder.svg?height=500&width=500"
+            src="/images/race-route.png" // Updated image path
             alt="Race event"
             width={500}
             height={500}
