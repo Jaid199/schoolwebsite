@@ -17,7 +17,8 @@ export default function Home() {
       <section
         className="relative w-full min-h-[400px] flex items-center justify-center"
         style={{
-          backgroundImage: "url('/images/hero-background.png')", // Updated image path
+          backgroundImage:
+            "url('https://races.3000tfg.com/wp-content/uploads/2022/04/group-2.jpeg')", // Updated image path
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
@@ -36,7 +37,7 @@ export default function Home() {
       <section className="flex flex-col md:flex-row items-center justify-center gap-8 py-12">
         <div className="w-full md:w-1/2 flex justify-end">
           <Image
-            src="/images/race-route.png" // Updated image path
+            src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimgv2-1-f.scribdassets.com%2Fimg%2Fdocument%2F623774395%2Foriginal%2F76bf2832da%2F1689482721%3Fv%3D1&f=1&nofb=1&ipt=b74c2fb6b2a5adfd70c7510c860cec200385d2266df56658c92e1a04299995d4" // Updated image path
             alt="Race event"
             width={500}
             height={500}

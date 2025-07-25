@@ -17,13 +17,21 @@ export default function Footer() {
               rel="noopener noreferrer"
               aria-label="MNU Home"
             >
-              <Image
-                src="/images/mnu-logo.png" // Updated image path
+              {/* <Image
+                src="/images/mnu-logo.png"
                 alt="Maldives National University Logo"
                 width={200}
                 height={64}
                 className="mx-auto mb-2"
                 style={{ maxHeight: "64px" }}
+              /> */}
+              <img
+                src="/images/mnu-logo.png"
+                alt="Maldives National University Logo"
+                width={160}
+                height={24}
+                className="mx-auto mb-2"
+                // style={{ maxHeight: "64px" }}
               />
             </Link>
             <p className="text-sm text-gray-500">
