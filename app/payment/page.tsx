@@ -372,7 +372,7 @@ export default function PaymentPage() {
                     <div className="absolute top-4 right-4 w-8 h-6 bg-yellow-400 rounded"></div>
                     <div className="mt-8">
                       <div className="text-lg tracking-widest">
-                        •••• •••• •••• ••••
+                        xxxx xxxx xxxx xxxx
                       </div>
                       <div className="mt-4 flex justify-between">
                         <div>
@@ -381,7 +381,7 @@ export default function PaymentPage() {
                         </div>
                         <div>
                           <div className="text-xs opacity-75">CVV</div>
-                          <div className="text-sm">•••</div>
+                          <div className="text-sm">xxx</div>
                         </div>
                       </div>
                     </div>
