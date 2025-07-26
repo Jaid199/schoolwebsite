@@ -403,7 +403,7 @@ export default function PaymentPage() {
                       <Input
                         id="cardName"
                         name="cardName"
-                        placeholder="John Doe"
+                        placeholder="Micle jaction bin hussain ahmed bun ozzy"
                         required
                       />
                     </div>
