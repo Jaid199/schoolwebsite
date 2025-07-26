@@ -32,29 +32,26 @@ const raceCategories = {
   "full-marathon": { name: "Full Marathon", fee: 550, prize: "MVR 10,000" },
 };
 
+interface Participant {
+  fullName: string;
+  email: string;
+  phoneNumber: string;
+  tshirtSize: string;
+}
+
 interface RegistrationData {
+  id: string;
   category: string;
-  mainParticipant: {
-    fullName: string;
-    email: string;
-    phoneNumber: string;
-    tshirtSize: string;
-  };
-  addFriend: boolean;
-  friendParticipant?: {
-    fullName: string;
-    email: string;
-    phoneNumber: string;
-    tshirtSize: string;
-  };
+  participant: Participant;
   includeTshirt: boolean;
+  totalPrice: number;
 }
 
 export default function PaymentPage() {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
-  const [registrationData, setRegistrationData] =
-    useState<RegistrationData | null>(null);
+  const [participants, setParticipants] = useState<RegistrationData[]>([]);
+  const [totalAmount, setTotalAmount] = useState(0);
   const [submissionMessage, setSubmissionMessage] = useState<{
     success: boolean;
     message: string;
@@ -63,39 +60,39 @@ export default function PaymentPage() {
   const [paymentMethod, setPaymentMethod] = useState<string>("card");
 
   useEffect(() => {
-    // Get registration data from localStorage
-    const storedData = localStorage.getItem("registrationData");
-    if (storedData) {
-      setRegistrationData(JSON.parse(storedData));
+    // Get participants data from localStorage
+    const storedParticipants = localStorage.getItem('checkoutParticipants');
+    if (storedParticipants) {
+      const parsedParticipants = JSON.parse(storedParticipants);
+      setParticipants(parsedParticipants);
+      
+      // Calculate total amount
+      const total = parsedParticipants.reduce((sum: number, participant: RegistrationData) => {
+        return sum + participant.totalPrice;
+      }, 0);
+      setTotalAmount(total);
     } else {
-      // Redirect back to registration if no data found
-      toast.error("No registration data found", {
-        description: "Please complete registration first.",
+      // No participants data, redirect back to register page
+      toast.error("No Registration Data Found", {
+        description: "Please complete your registration first before proceeding to payment.",
+        style: {
+          background: '#fef2f2',
+          color: '#991b1b',
+          border: '1px solid #fecaca',
+        },
       });
-      router.push("/registration");
+      router.push('/register');
     }
   }, [router]);
 
-  // Calculate total cost
-  const calculateTotal = () => {
-    if (!registrationData) return 0;
-
-    let total = 0;
-    const categoryFee =
-      raceCategories[registrationData.category as keyof typeof raceCategories]
-        ?.fee || 0;
-
-    total += categoryFee;
-    if (registrationData.addFriend) {
-      total += categoryFee;
-    }
-    if (registrationData.includeTshirt) {
-      total += 50; // T-shirt cost
-      if (registrationData.addFriend) {
-        total += 50;
-      }
-    }
-    return total;
+  const getCategoryDisplayName = (category: string) => {
+    const categoryMap: Record<string, string> = {
+      "5k-race": "5K Race",
+      "10k-race": "10K Race",
+      "half-marathon": "Half Marathon",
+      "full-marathon": "Full Marathon"
+    };
+    return categoryMap[category] || category;
   };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -104,12 +101,17 @@ export default function PaymentPage() {
       // Validate file type
       if (file.type === "image/png" || file.type === "image/jpeg") {
         setSelectedFile(file);
-        toast.success("File selected", {
-          description: `${file.name} has been selected for upload.`,
+        toast.success("File Selected Successfully", {
+          description: `${file.name} has been selected and is ready for upload.`,
         });
       } else {
-        toast.error("Invalid file type", {
-          description: "Please select a PNG or JPEG file.",
+        toast.error("Invalid File Type", {
+          description: "Please select a PNG or JPEG image file only.",
+          style: {
+            background: '#fef2f2',
+            color: '#991b1b',
+            border: '1px solid #fecaca',
+          },
         });
         event.target.value = "";
       }
@@ -129,11 +131,16 @@ export default function PaymentPage() {
       });
 
       toast.success("Payment Successful!", {
-        description: "Your card payment has been processed successfully.",
+        description: "Your registration has been confirmed. You will receive a confirmation email shortly.",
       });
 
-      // Clear registration data from localStorage
-      localStorage.removeItem("registrationData");
+      // Clear participants data from localStorage
+      localStorage.removeItem("checkoutParticipants");
+      
+      // Redirect to home page after successful payment
+      setTimeout(() => {
+        router.push('/');
+      }, 2000);
     });
   };
 
@@ -143,8 +150,13 @@ export default function PaymentPage() {
     event.preventDefault();
 
     if (!selectedFile) {
-      toast.error("Payment slip required", {
-        description: "Please upload your payment slip to proceed.",
+      toast.error("Payment Slip Required", {
+        description: "Please upload your payment slip before submitting.",
+        style: {
+          background: '#fef2f2',
+          color: '#991b1b',
+          border: '1px solid #fecaca',
+        },
       });
       return;
     }
@@ -164,12 +176,17 @@ export default function PaymentPage() {
           "We will verify your payment and confirm your registration within 24 hours.",
       });
 
-      // Clear registration data from localStorage
-      localStorage.removeItem("registrationData");
+      // Clear participants data from localStorage
+      localStorage.removeItem("checkoutParticipants");
+      
+      // Redirect to home page after successful payment
+      setTimeout(() => {
+        router.push('/');
+      }, 2000);
     });
   };
 
-  if (!registrationData) {
+  if (participants.length === 0) {
     return (
       <div className="container mx-auto py-12 px-4 max-w-6xl">
         <div className="text-center">
@@ -207,32 +224,25 @@ export default function PaymentPage() {
             {/* Participant Details */}
             <div className="space-y-3">
               <h4 className="font-medium text-gray-900">Participant Details</h4>
-              <div className="bg-gray-50 p-3 rounded-lg">
-                <p className="font-medium">
-                  {registrationData.mainParticipant.fullName}
-                </p>
-                <p className="text-sm text-gray-600">
-                  {registrationData.mainParticipant.email}
-                </p>
-                <p className="text-sm text-gray-600">
-                  {registrationData.mainParticipant.phoneNumber}
-                </p>
-              </div>
-
-              {registrationData.addFriend &&
-                registrationData.friendParticipant && (
-                  <div className="bg-gray-50 p-3 rounded-lg">
-                    <p className="font-medium">
-                      {registrationData.friendParticipant.fullName}
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      {registrationData.friendParticipant.email}
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      {registrationData.friendParticipant.phoneNumber}
-                    </p>
-                  </div>
-                )}
+              {participants.map((registration) => (
+                <div key={registration.id} className="bg-gray-50 p-3 rounded-lg">
+                  <p className="font-medium">
+                    {registration.participant.fullName}
+                  </p>
+                  <p className="text-sm text-gray-600">
+                    {registration.participant.email}
+                  </p>
+                  <p className="text-sm text-gray-600">
+                    {registration.participant.phoneNumber}
+                  </p>
+                  <p className="text-sm text-gray-600">
+                    Category: {getCategoryDisplayName(registration.category)}
+                  </p>
+                  <p className="text-sm text-gray-600">
+                    T-shirt: {registration.includeTshirt ? `Yes (${registration.participant.tshirtSize})` : 'No'}
+                  </p>
+                </div>
+              ))}
             </div>
 
             <Separator />
@@ -240,58 +250,36 @@ export default function PaymentPage() {
             {/* Cost Breakdown */}
             <div className="space-y-3">
               <h4 className="font-medium text-gray-900">Cost Breakdown</h4>
-              <div className="flex justify-between">
-                <span>Race Category:</span>
-                <span className="font-medium">
-                  {
-                    raceCategories[
-                      registrationData.category as keyof typeof raceCategories
-                    ]?.name
-                  }
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span>Entry Fee:</span>
-                <span>
-                  MVR{" "}
-                  {
-                    raceCategories[
-                      registrationData.category as keyof typeof raceCategories
-                    ]?.fee
-                  }
-                </span>
-              </div>
-              {registrationData.addFriend && (
-                <div className="flex justify-between">
-                  <span>Friend Entry Fee:</span>
-                  <span>
-                    MVR{" "}
-                    {
-                      raceCategories[
-                        registrationData.category as keyof typeof raceCategories
-                      ]?.fee
-                    }
-                  </span>
-                </div>
-              )}
-              {registrationData.includeTshirt && (
-                <>
+              {participants.map((registration) => (
+                <div key={registration.id} className="space-y-2">
                   <div className="flex justify-between">
-                    <span>T-shirt:</span>
-                    <span>MVR 50</span>
+                    <span>{registration.participant.fullName}:</span>
+                    <span className="font-medium">
+                      {getCategoryDisplayName(registration.category)}
+                    </span>
                   </div>
-                  {registrationData.addFriend && (
+                  <div className="flex justify-between">
+                    <span>Entry Fee:</span>
+                    <span>
+                      MVR {raceCategories[registration.category as keyof typeof raceCategories]?.fee}
+                    </span>
+                  </div>
+                  {registration.includeTshirt && (
                     <div className="flex justify-between">
-                      <span>Friend T-shirt:</span>
+                      <span>T-shirt:</span>
                       <span>MVR 50</span>
                     </div>
                   )}
-                </>
-              )}
-              <Separator />
+                  <div className="flex justify-between font-medium">
+                    <span>Subtotal:</span>
+                    <span>MVR {registration.totalPrice}</span>
+                  </div>
+                  <Separator />
+                </div>
+              ))}
               <div className="flex justify-between text-lg font-bold">
                 <span>Total:</span>
-                <span>MVR {calculateTotal()}</span>
+                <span>MVR {totalAmount}</span>
               </div>
             </div>
 
@@ -312,7 +300,7 @@ export default function PaymentPage() {
                 </p>
                 <p>
                   <strong>Reference:</strong> RACE-
-                  {registrationData.mainParticipant.fullName
+                  {participants[0]?.participant.fullName
                     .replace(/\s+/g, "")
                     .toUpperCase()}
                 </p>
@@ -324,12 +312,7 @@ export default function PaymentPage() {
                 Prize Information
               </h4>
               <p className="text-sm text-blue-700">
-                {
-                  raceCategories[
-                    registrationData.category as keyof typeof raceCategories
-                  ]?.prize
-                }{" "}
-                for top 3 male & female finishers
+                Various prizes for top 3 male & female finishers in each category
               </p>
             </div>
           </CardContent>
@@ -464,7 +447,7 @@ export default function PaymentPage() {
                     size="lg"
                     disabled={isPending}
                   >
-                    {isPending ? "Processing Payment..." : "Pay Now"}
+                    {isPending ? "Processing Payment..." : `Pay Now - MVR ${totalAmount}`}
                   </Button>
                 </form>
               </div>
@@ -527,7 +510,6 @@ export default function PaymentPage() {
                               accept=".png,.jpeg,.jpg"
                               onChange={handleFileChange}
                               className="hidden"
-                              required
                             />
                           </label>
                         </div>
@@ -561,7 +543,7 @@ export default function PaymentPage() {
                   >
                     {isPending
                       ? "Uploading Payment Slip..."
-                      : "Submit Payment Slip"}
+                      : `Submit Payment Slip - MVR ${totalAmount}`}
                   </Button>
                 </form>
               </div>
@@ -583,4 +565,4 @@ export default function PaymentPage() {
       </div>
     </div>
   );
-}
+} 

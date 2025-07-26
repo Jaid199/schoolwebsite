@@ -17,8 +17,7 @@ export default function Home() {
       <section
         className="relative w-full min-h-[400px] flex items-center justify-center"
         style={{
-          backgroundImage:
-            "url('https://races.3000tfg.com/wp-content/uploads/2022/04/group-2.jpeg')", // Updated image path
+          backgroundImage: "url('/images/hero-bg.jpg')",
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
@@ -35,17 +34,16 @@ export default function Home() {
       </section>
       {/* race route section */}
       <section className="flex flex-col md:flex-row items-center justify-center gap-8 py-12">
-        <div className="w-full md:w-1/2 flex justify-end">
-          <Image
-            src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimgv2-1-f.scribdassets.com%2Fimg%2Fdocument%2F623774395%2Foriginal%2F76bf2832da%2F1689482721%3Fv%3D1&f=1&nofb=1&ipt=b74c2fb6b2a5adfd70c7510c860cec200385d2266df56658c92e1a04299995d4" // Updated image path
+        <div className="w-full md:w-1/2 flex md:justify-end justify-center">
+          <img
+            src="/images/run-route.jpg"
             alt="Race event"
-            width={500}
-            height={500}
+            style={{ width: "500px", height: "auto" }}
             className="rounded-lg shadow-lg object-cover"
           />
         </div>
         <div className="w-full md:w-1/2 flex flex-col justify-start">
-          <div className="max-w-[600px] px-6 md:px-12">
+          <div className="md:mx-0 mx-auto w-fit max-w-[600px] px-6 md:px-12">
             <h2 className="text-2xl font-semibold mb-3">
               Experience the Action
             </h2>
@@ -64,8 +62,8 @@ export default function Home() {
         <h2 className="text-2xl font-bold text-center mb-6">
           Race Events & Details
         </h2>
-        <div className="max-w-5xl w-fit mx-auto px-4">
-          <Table className="min-w-[900px] bg-white rounded-lg shadow-md">
+        <div className="max-w-[90vw] w-fit mx-auto px-4 overflow-x-auto">
+          <Table className="bg-white rounded-lg shadow-md">
             <TableHeader>
               <TableRow>
                 <TableHead className="py-3 px-8 bg-gray-100 text-left text-sm font-semibold text-gray-700">
@@ -142,7 +140,7 @@ export default function Home() {
         </Link>
         <p className="mt-6 text-sm text-blue-200">
           <span className="italic">
-            Note: Item collection point is at <strong>MNU location</strong>.
+            Note: Item collection point is at <strong>MNU Central Administration</strong>.
           </span>
         </p>
       </section>
