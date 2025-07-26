@@ -1,6 +1,6 @@
+import type React from "react";
 import type { Metadata } from "next";
 import "./globals.css";
-
 import { Inter } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
 

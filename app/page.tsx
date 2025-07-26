@@ -9,7 +9,6 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import Footer from "@/components/footer";
-// Import the new Footer component
 
 export default function Home() {
   return (
